@@ -1,4 +1,32 @@
+import { useQuery } from "@tanstack/react-query";
+import { sleep } from "../../helpers";
+
+
+const getLabels = async (): Promise<unknown[]> => {
+
+  await sleep(1500)
+
+ const resp = await fetch('https://api.github.com/repos/facebook/react/labels')
+ .then(res => res.json())
+
+ console.log(resp)
+
+ return []
+}
+
+
 export const LabelPicker = () => {
+
+
+  const labelsQuery = useQuery({
+    queryKey:['labels'],
+    queryFn: getLabels,
+  })
+
+  if(labelsQuery.isLoading){
+    return <div className="flex items-center justify-center">Espere...</div>
+  }
+
   return (
     <>
       <span
