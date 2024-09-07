@@ -1,7 +1,7 @@
 import { FiInfo, FiMessageSquare, FiCheckCircle } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { GithubIssue, State } from "../interfaces/issue.interface";
-import { getIssue } from "../actions";
+import { getIssue, getIssueComments } from "../actions";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface Props {
@@ -17,6 +17,18 @@ export const IssueItem = ({ issue }: Props) => {
       queryKey: ["issue", issue.number],
       queryFn: () => getIssue(issue.number),
       staleTime: 1000 * 60,
+    });
+  };
+
+  queryClient.prefetchQuery({
+    queryKey: ["issues", issue.number, "comments"],
+    queryFn: () => getIssueComments(issue.number),
+    staleTime: 1000 * 60,
+  });
+
+  const presetData = () => {//mantener data fresca en cache
+    queryClient.setQueryData(["issue", issue.number], issue, {
+      updatedAt: Date.now() + 1000 * 60, // update the data in the cache
     });
   };
 

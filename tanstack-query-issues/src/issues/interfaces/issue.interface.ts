@@ -70,6 +70,7 @@ export interface GithubIssue {
   }
   
   export enum State {
+    All = 'all',
     Open = 'open',
     Close = 'close',
   }
